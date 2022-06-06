@@ -1,24 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { day1 } from "./questions/day1";
+import { Responses, GameStatus } from "./types";
+import Questioning from "./components/Questioning";
+import Results from "./components/Results";
+import "./App.css";
 
 function App() {
+  const [responses, setResponses] = useState<Responses>({});
+  const [gameStatus, setGameStatus] = useState<GameStatus>("before");
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {gameStatus === "before" && (
+        <button onClick={() => setGameStatus("during")}>Start</button>
+      )}
+      {gameStatus === "during" && (
+        <Questioning
+          setResponses={setResponses}
+          responses={responses}
+          questionList={day1}
+          setGameStatus={setGameStatus}
+        />
+      )}
+      {gameStatus === "after" && (
+        <Results
+          questionList={day1}
+          setGameStatus={setGameStatus}
+          responses={responses}
+        />
+      )}
     </div>
   );
 }
